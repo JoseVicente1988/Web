@@ -1,3 +1,4 @@
+// api/db/health.js
 const { getDB, listTables } = require("../_db");
 
 module.exports = async (req, res) => {
