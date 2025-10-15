@@ -6,6 +6,7 @@
   "main": "Server.js",
   "scripts": {
     "start": "node Server.js",
+    "dev": "nodemon Server.js",
     "build": "echo \"(sin build)\""
   },
   "engines": {
@@ -14,5 +15,8 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^12.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
