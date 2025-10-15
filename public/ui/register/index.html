@@ -1,19 +1,28 @@
 <!doctype html><meta charset="utf-8"><title>GroFriends — Registro</title>
-<!-- Usa el mismo CSS base que en /ui -->
 <style>
-/* ... mismo CSS base ... */
+:root{--bg:#0b0c10;--card:#14161b;--ink:#e8e8ea;--muted:#9aa0a6;--acc:#7dd3fc;--acc2:#a78bfa;--ok:#86efac;--err:#fca5a5;--chip:#0f1116;}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,var(--bg) 0%,#0d1016 100%);color:var(--ink);font:14px/1.5 system-ui,Segoe UI,Roboto}
+a{color:var(--acc)} input,button,textarea,select{font:inherit}
+.app{max-width:1000px;margin:28px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid #2a2e36;border-radius:16px;padding:16px;box-shadow:0 6px 30px rgba(0,0,0,.25)}
+.grid{display:grid;gap:12px}
+.list{list-style:none;margin:0;padding:0}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #2a2e36;border-radius:12px;background:#0f1116;margin:6px 0}
+.badge{padding:4px 8px;border-radius:999px;background:#1a1e27;border:1px solid #2a2e36;color:var(--muted)}
+.muted{color:var(--muted)} .ok{color:var(--ok)} .err{color:var(--err)}
+.tab{padding:10px 12px;border-radius:12px;border:1px solid #23252c;background:var(--chip);cursor:pointer}
 </style>
 <body data-theme="pastel">
 <div class="app">
-  <div class="header"><h1>Crear cuenta</h1></div>
   <div class="card">
+    <h2>Crear cuenta</h2>
     <form id="regForm" class="grid">
       <input id="email" type="email" placeholder="Email" required>
       <input id="name" type="text" placeholder="Nombre (opcional)">
       <input id="password" type="password" placeholder="Password (min 8)" required minlength="8">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button>Registrar</button>
-        <a class="tab" href="/ui">Iniciar sesión</a>
+        <a class="tab" data-ui="/ui" href="/ui">Iniciar sesión</a>
       </div>
     </form>
     <div id="msg" class="muted"></div>
@@ -21,6 +30,15 @@
 </div>
 <script>
 const $ = s => document.querySelector(s);
+const UI_BASE = location.pathname.startsWith("/public/") ? "/public" : "";
+function go(p){ location.href = UI_BASE + p; }
+function fixLinks(){
+  document.querySelectorAll('a[data-ui]').forEach(a=>{
+    a.href = UI_BASE + a.getAttribute('data-ui');
+  });
+}
+fixLinks();
+
 document.body.setAttribute("data-theme","pastel");
 $("#regForm").addEventListener("submit", async (e)=>{
   e.preventDefault(); $("#msg").textContent = "Creando usuario…";
@@ -30,7 +48,7 @@ $("#regForm").addEventListener("submit", async (e)=>{
     const j = await r.json();
     if(!j.ok){ $("#msg").innerHTML = '<span class="err">'+(j.error||'Error')+'</span>'; return; }
     $("#msg").innerHTML = '<span class="ok">Cuenta creada. Redirigiendo…</span>';
-    setTimeout(()=>location.href="/ui",700);
+    setTimeout(()=>go("/ui"),700); // <- antes era /ui fijo
   }catch(err){ $("#msg").innerHTML = '<span class="err">'+err.message+'</span>'; }
 });
 </script>
