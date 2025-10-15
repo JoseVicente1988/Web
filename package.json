@@ -2,19 +2,15 @@
   "name": "mychatweb",
   "version": "1.0.0",
   "private": true,
-  "description": "",
-  "main": "Server.js",
   "scripts": {
     "dev": "nodemon Server.js",
     "start": "node Server.js",
     "build": "echo \"(sin build)\""
   },
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "better-sqlite3": "^12.4.1"
+    "@libsql/client": "^0.10.4",
+    "bcryptjs": "^3.0.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
