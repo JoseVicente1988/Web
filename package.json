@@ -1,22 +1,18 @@
 {
-  "name": "mychatweb",
+  "name": "web",
   "version": "1.0.0",
   "private": true,
-  "description": "",
-  "main": "Server.js",
-  "scripts": {
-    "dev": "nodemon Server.js",
-    "start": "node Server.js",
-    "build": "echo \"(sin build)\""
-  },
   "engines": {
-    "node": ">=18"
+    "node": "22.x"
+  },
+  "packageManager": "npm@10.9.3",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo \"no build step\"",
+    "start": "vercel dev",
+    "test": "echo \"(no tests)\""
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "sql.js": "^1.10.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
+    "sql.js": "1.13.0"
   }
 }

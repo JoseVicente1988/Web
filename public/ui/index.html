@@ -1,100 +1,14 @@
 <!doctype html>
-<html lang="es">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>GroFriends — Login</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <style>
-      :root{--bg:#0b0c10;--card:#14161b;--ink:#e8e8ea;--muted:#9aa0a6;--acc:#7dd3fc;--acc2:#a78bfa;--ok:#86efac;--err:#fca5a5;--chip:#0f1116;}
-      *{box-sizing:border-box}
-      body{margin:0;background:linear-gradient(180deg,var(--bg) 0%,#0d1016 100%);color:var(--ink);font:14px/1.5 system-ui,Segoe UI,Roboto}
-      a{color:var(--acc);text-decoration:none}
-      input,button,textarea,select{font:inherit}
-      .app{max-width:1000px;margin:28px auto;padding:0 16px}
-      .card{background:var(--card);border:1px solid #2a2e36;border-radius:16px;padding:16px;box-shadow:0 6px 30px rgba(0,0,0,.25)}
-      .grid{display:grid;gap:12px}
-      .cols-2{grid-template-columns:1fr 1fr}
-      .list{list-style:none;margin:0;padding:0}
-      .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid #2a2e36;border-radius:12px;background:#0f1116;margin:6px 0}
-      .badge{padding:4px 8px;border-radius:999px;background:#1a1e27;border:1px solid #2a2e36;color:var(--muted)}
-      .muted{color:var(--muted)} .ok{color:var(--ok)} .err{color:var(--err)}
-      .tab{padding:10px 12px;border-radius:12px;border:1px solid #23252c;background:var(--chip);cursor:pointer;display:inline-block}
-      .btnrow{display:flex;gap:8px;flex-wrap:wrap}
-      input[type="email"],input[type="password"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #2a2e36;background:#0f1116;color:var(--ink)}
-      button{padding:10px 12px;border:0;border-radius:10px;background:var(--acc);color:#082431;font-weight:700;cursor:pointer}
-    </style>
-    <script>
-      const UI_BASE = location.pathname.startsWith("/public/") ? "/public" : "";
-      function go(p){ location.href = UI_BASE + p; }
-      function fixLinks(){
-        document.querySelectorAll('a[data-ui]').forEach(a=>{
-          a.href = UI_BASE + a.getAttribute('data-ui');
-        });
-      }
-      document.addEventListener('DOMContentLoaded', fixLinks);
-    </script>
+    <title>UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>body{font-family:system-ui,Arial;margin:2rem}</style>
   </head>
-  <body data-theme="pastel">
-    <div class="app">
-      <div class="card grid cols-2">
-        <div>
-          <h2 style="margin:0 0 8px">Accede</h2>
-          <form id="loginForm" class="grid" autocomplete="on">
-            <input id="email" type="email" placeholder="Email" required autofocus />
-            <input id="password" type="password" placeholder="Password" required minlength="8" />
-            <div class="btnrow">
-              <button type="submit">Entrar</button>
-              <a class="tab" data-ui="/ui/register" href="/ui/register">Crear cuenta</a>
-            </div>
-          </form>
-          <div id="msg" class="muted" style="min-height:20px"></div>
-        </div>
-        <div>
-          <h2 style="margin:0 0 8px">Incluye</h2>
-          <ul class="list">
-            <li class="item"><span>Lista</span><span class="badge">Items</span></li>
-            <li class="item"><span>Social</span><span class="badge">Feed + Likes/Comentarios</span></li>
-            <li class="item"><span>Amigos + Chat</span><span class="badge">Tiempo real</span></li>
-            <li class="item"><span>Metas</span><span class="badge">Públicas/Privadas</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      const $ = s => document.querySelector(s);
-      document.body.setAttribute("data-theme","pastel");
-
-      $("#loginForm").addEventListener("submit", async (e)=>{
-        e.preventDefault();
-        $("#msg").textContent = "Autenticando…";
-        try{
-          const r = await fetch("/auth/login", {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-              email: $("#email").value.trim().toLowerCase(),
-              password: $("#password").value
-            })
-          });
-
-          const ct = r.headers.get("content-type") || "";
-          if (!ct.includes("application/json")) {
-            const txt = await r.text().catch(()=> "");
-            throw new Error(txt || `Respuesta no JSON (HTTP ${r.status})`);
-          }
-
-          const j = await r.json();
-          if(!j.ok){
-            $("#msg").innerHTML = '<span class="err">'+(j.error||'Error')+'</span>';
-            return;
-          }
-          localStorage.setItem("token", j.token);
-          go("/app");
-        }catch(err){
-          $("#msg").innerHTML = '<span class="err">'+(err.message||'Error desconocido')+'</span>';
-        }
-      });
-    </script>
+  <body>
+    <h1>UI OK</h1>
+    <p>Si ves esto, la capa estática funciona y el catch-all también.</p>
+    <p><a href="/app">Ir a /app</a> · <a href="/cualquier/ruta">Ruta SPA</a> · <a href="/api/_status">/api/_status</a></p>
   </body>
 </html>

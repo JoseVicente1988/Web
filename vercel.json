@@ -3,20 +3,5 @@
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" },
     { "src": "public/**", "use": "@vercel/static" }
-  ],
-  "rewrites": [
-    {
-      "source": "/(auth|events|prefs|photo|account/delete|items.*|friends.*|goals.*|feed.*|dm.*|users.*)",
-      "destination": "/api/[...path]?path=/$1"
-    },
-    { "source": "/", "destination": "/public/ui/index.html" },
-    { "source": "/ui", "destination": "/public/ui/index.html" },
-    { "source": "/ui/register", "destination": "/public/ui/register/index.html" },
-    { "source": "/app", "destination": "/public/app.html" }
-  ],
-  "redirects": [
-    { "source": "/public/ui", "destination": "/ui", "permanent": false },
-    { "source": "/public/ui/register", "destination": "/ui/register", "permanent": false },
-    { "source": "/public/app", "destination": "/app", "permanent": false }
   ]
 }
