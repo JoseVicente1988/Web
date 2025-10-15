@@ -42,7 +42,7 @@ async function openDBFromFile() {
   }
 
   const fileBuffer = fs.readFileSync(dbPath);
-  const db = new SQL.Database(new Uint8Array(fileBuffer)); // copia en memoria
+  const db = new (await loadSql()).Database(new Uint8Array(fileBuffer)); // copia en memoria
   return db;
 }
 
