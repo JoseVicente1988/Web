@@ -1,3 +1,5 @@
+// api/db/query.js
+// Solo SELECT: POST { "sql": "SELECT ...", "params": [] }
 const { getDB, runSelect } = require("../_db");
 
 function parseBody(req) {
