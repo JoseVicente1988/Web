@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>GroFriends — App</title>
+<style>
+  body{margin:0;background:#0b0c10;color:#e8e8ea;font:14px system-ui,Segoe UI,Roboto}
+  .card{max-width:900px;margin:32px auto;padding:24px;border:1px solid #23252c;border-radius:12px;background:#14161b}
+  button{padding:8px 12px;border-radius:10px;border:1px solid #2a2e36;background:#0f1116;color:#e8e8ea;cursor:pointer}
+</style>
+<body>
+  <div class="card">
+    <h1>GroFriends — App</h1>
+    <p>Stub temporal. Estás logueado si ves tus datos abajo.</p>
+    <pre id="me">Cargando…</pre>
+    <div style="display:flex;gap:8px">
+      <button id="logout">Salir</button>
+      <button id="irUI">Volver a UI</button>
+    </div>
+  </div>
+<script>
+  const UI_BASE = location.pathname.startsWith("/public/") ? "/public" : "";
+  function go(p){ location.href = UI_BASE + p; }
+  const token = localStorage.getItem("token");
+  if(!token){ go("/ui"); }
+
+  async function api(path, opts={}) {
+    const r = await fetch(path, Object.assign({ headers: { "Authorization": "Bearer "+token }}, opts));
+    const j = await r.json().catch(()=>({ ok:false, error:"Respuesta no JSON" }));
+    if(!j.ok) throw new Error(j.error||"Error");
+    return j;
+  }
+  (async ()=>{
+    try {
+      const j = await api("/auth/me", { method: "GET" });
+      document.getElementById("me").textContent = JSON.stringify(j.user, null, 2);
+    } catch(e){
+      localStorage.removeItem("token"); go("/ui");
+    }
+  })();
+
+  document.getElementById("logout").onclick = async ()=>{
+    try{ await api("/auth/logout",{method:"POST"}); }catch{}
+    localStorage.removeItem("token"); go("/ui");
+  };
+  document.getElementById("irUI").onclick = ()=>go("/ui");
+</script>
+</body>

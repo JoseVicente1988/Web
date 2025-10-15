@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Redirigiendo…</title>
+<script>
+  // Si alguien abre /public/index.html directamente, saltamos a la UI.
+  (function(){
+    var base = location.pathname.startsWith("/public/") ? "/public" : "";
+    location.replace(base + "/ui");
+  })();
+</script>
+<noscript>
+  <meta http-equiv="refresh" content="0; url=/ui">
+  <p>Redirigiendo a <a href="/ui">/ui</a>…</p>
+</noscript>
