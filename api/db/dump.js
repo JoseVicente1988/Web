@@ -1,3 +1,4 @@
+// api/db/dump.js
 const { getDB, listTables, runSelect } = require("../_db");
 
 module.exports = async (req, res) => {
