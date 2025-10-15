@@ -5,8 +5,8 @@
   "description": "",
   "main": "Server.js",
   "scripts": {
-    "start": "node Server.js",
     "dev": "nodemon Server.js",
+    "start": "node Server.js",
     "build": "echo \"(sin build)\""
   },
   "engines": {
