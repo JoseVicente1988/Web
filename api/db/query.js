@@ -1,5 +1,3 @@
-// api/db/query.js
-// POST { sql: "SELECT ... WHERE x = ?", params: [..] }  --> SOLO SELECT
 const { getDB, runSelect } = require("../_db");
 
 function parseBody(req) {
@@ -13,9 +11,10 @@ function parseBody(req) {
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
-    res.status(405).json({ ok: false, error: "Use POST with JSON { sql, params }" });
+    res.status(405).json({ ok: false, error: "Use POST con JSON { sql, params }" });
     return;
   }
+
   const body = parseBody(req);
   const sql = (body.sql || "").trim();
   const params = Array.isArray(body.params) ? body.params : [];
