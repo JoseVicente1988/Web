@@ -85,7 +85,14 @@ export default async function handler(req, res) {
   await ensureSchema();
 
   const urlObj = new URL(req.url, "http://x");
-  let pathn = urlObj.pathname || "/";
+  // Prefer the original path if the rewrite sent it
+  let rawPath = urlObj.searchParams.get("path") || urlObj.pathname || "/";
+  // Normalize (strip trailing slash except for root)
+  let pathn = rawPath.length > 1 && rawPath.endsWith("/") ? rawPath.slice(0, -1) : rawPath;
+
+  // ... the rest of your router (unchanged) ...
+}
+
   if (pathn.length > 1 && pathn.endsWith("/")) pathn = pathn.slice(0, -1);
 
   const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
