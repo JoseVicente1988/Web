@@ -5,7 +5,7 @@
     { "src": "public/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/(auth|events|prefs|photo|account/delete|items(?:/.*)?|friends(?:/.*)?|goals(?:/.*)?|feed(?:/.*)?|dm(?:/.*)?|users(?:/.*)?)", "dest": "/api/$1" },
+    { "src": "/(auth|events|prefs|photo|account/delete|items(?:/.*)?|friends(?:/.*)?|goals(?:/.*)?|feed(?:/.*)?|dm(?:/.*)?|users(?:/.*)?)", "dest": "/api/[...path]" },
     { "src": "/", "dest": "/public/ui/index.html" },
     { "src": "/ui", "dest": "/public/ui/index.html" },
     { "src": "/ui/register", "dest": "/public/ui/register/index.html" },
