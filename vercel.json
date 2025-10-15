@@ -7,12 +7,19 @@
   "routes": [
     { "src": "/(auth|events|prefs|photo|account/delete|items(?:/.*)?|friends(?:/.*)?|goals(?:/.*)?|feed(?:/.*)?|dm(?:/.*)?|users(?:/.*)?)", "dest": "/api/$1" },
 
-    { "src": "/ui", "dest": "/public/ui/index.html" },
-    { "src": "/ui/register", "dest": "/public/ui/register/index.html" },
-    { "src": "/app", "dest": "/public/app/index.html" },
+    /* Raíz → UI (no mostramos index.html) */
+    { "src": "^/$", "dest": "/public/ui/index.html" },
 
-    { "src": "/public/ui/?", "status": 308, "headers": { "Location": "/ui" } },
-    { "src": "/public/ui/register/?", "status": 308, "headers": { "Location": "/ui/register" } },
-    { "src": "/public/app/?", "status": 308, "headers": { "Location": "/app" } }
+    /* UI canónica */
+    { "src": "^/ui$", "dest": "/public/ui/index.html" },
+    { "src": "^/ui/register$", "dest": "/public/ui/register/index.html" },
+
+    /* APP: apuntamos a /public/app.html (stub si aún no tienes la página grande) */
+    { "src": "^/app$", "dest": "/public/app.html" },
+
+    /* Si alguien entra por /public/*, normalizamos */
+    { "src": "^/public/ui/?$", "status": 308, "headers": { "Location": "/ui" } },
+    { "src": "^/public/ui/register/?$", "status": 308, "headers": { "Location": "/ui/register" } },
+    { "src": "^/public/app/?$", "status": 308, "headers": { "Location": "/app" } }
   ]
 }
