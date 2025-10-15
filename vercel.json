@@ -1,23 +1,18 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "public/**", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/index.html"
-    }
+    { "src": "/(auth|events|prefs|photo|account/delete|items(?:/.*)?|friends(?:/.*)?|goals(?:/.*)?|feed(?:/.*)?|dm(?:/.*)?|users(?:/.*)?)", "dest": "/api/$1" },
+
+    { "src": "/ui", "dest": "/public/ui/index.html" },
+    { "src": "/ui/register", "dest": "/public/ui/register/index.html" },
+    { "src": "/app", "dest": "/public/app/index.html" },
+
+    { "src": "/public/ui/?", "status": 308, "headers": { "Location": "/ui" } },
+    { "src": "/public/ui/register/?", "status": 308, "headers": { "Location": "/ui/register" } },
+    { "src": "/public/app/?", "status": 308, "headers": { "Location": "/app" } }
   ]
 }
