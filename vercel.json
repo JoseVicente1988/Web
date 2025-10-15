@@ -5,8 +5,6 @@
     { "src": "public/**", "use": "@vercel/static" }
   ],
   "rewrites": [
-    { "source": "/api/:any*", "destination": "/api/:any*" },
-
     {
       "source": "/:path((auth|events|prefs|photo|account/delete|items.*|friends.*|goals.*|feed.*|dm.*|users.*))",
       "destination": "/api/[...path]?path=/:path"
@@ -15,6 +13,7 @@
     { "source": "/", "destination": "/ui/index.html" },
     { "source": "/ui", "destination": "/ui/index.html" },
     { "source": "/ui/:rest*", "destination": "/ui/index.html" },
+
     { "source": "/app", "destination": "/app.html" }
   ],
   "redirects": [

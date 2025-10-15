@@ -24,8 +24,7 @@
       button{padding:10px 12px;border:0;border-radius:10px;background:var(--acc);color:#082431;font-weight:700;cursor:pointer}
     </style>
     <script>
-      // Helper para funcionar igual si el usuario entra por /ui o por /public/ui
-      const UI_BASE = (location.pathname.startsWith("/public/") ? "/public" : "");
+      const UI_BASE = location.pathname.startsWith("/public/") ? "/public" : "";
       function go(p){ location.href = UI_BASE + p; }
       function fixLinks(){
         document.querySelectorAll('a[data-ui]').forEach(a=>{
@@ -78,6 +77,13 @@
               password: $("#password").value
             })
           });
+
+          const ct = r.headers.get("content-type") || "";
+          if (!ct.includes("application/json")) {
+            const txt = await r.text().catch(()=> "");
+            throw new Error(txt || `Respuesta no JSON (HTTP ${r.status})`);
+          }
+
           const j = await r.json();
           if(!j.ok){
             $("#msg").innerHTML = '<span class="err">'+(j.error||'Error')+'</span>';
@@ -86,7 +92,7 @@
           localStorage.setItem("token", j.token);
           go("/app");
         }catch(err){
-          $("#msg").innerHTML = '<span class="err">'+err.message+'</span>';
+          $("#msg").innerHTML = '<span class="err">'+(err.message||'Error desconocido')+'</span>';
         }
       });
     </script>
