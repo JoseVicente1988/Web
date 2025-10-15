@@ -4,9 +4,17 @@
     { "src": "api/**/*.js", "use": "@vercel/node" },
     { "src": "public/**", "use": "@vercel/static" }
   ],
+  "functions": {
+    "api/**/*.js": {
+      "includedFiles": [
+        "shoping.db",
+        "shopping.db",
+        "node_modules/sql.js/dist/sql-wasm.wasm"
+      ]
+    }
+  },
   "rewrites": [
     { "source": "/api/:any*", "destination": "/api/:any*" },
-
     { "source": "/", "destination": "/ui/index.html" },
     { "source": "/ui", "destination": "/ui/index.html" },
     { "source": "/ui/:rest*", "destination": "/ui/index.html" },
