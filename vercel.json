@@ -6,13 +6,15 @@
   ],
   "rewrites": [
     {
-      "source": "/(auth|events|prefs|photo|account/delete|items.*|friends.*|goals.*|feed.*|dm.*|users.*)",
-      "destination": "/api/[...path]?path=/$1"
+      "source": "/:path((auth|events|prefs|photo|account/delete|items.*|friends.*|goals.*|feed.*|dm.*|users.*))",
+      "destination": "/api/[...path]?path=/:path"
     },
-    { "source": "/", "destination": "/public/ui/index.html" },
-    { "source": "/ui", "destination": "/public/ui/index.html" },
-    { "source": "/ui/register", "destination": "/public/ui/register/index.html" },
-    { "source": "/app", "destination": "/public/app.html" }
+
+    { "source": "/", "destination": "/ui/index.html" },
+    { "source": "/ui", "destination": "/ui/index.html" },
+    { "source": "/ui/:rest*", "destination": "/ui/index.html" },
+
+    { "source": "/app", "destination": "/app.html" }
   ],
   "redirects": [
     { "source": "/public/ui", "destination": "/ui", "permanent": false },
