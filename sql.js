@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'no build step'",
+    "build": "echo \"no build step\"",
     "start": "vercel dev"
   },
   "dependencies": {
-    "sql.js": "^1.12.0",
-    "zod": "^3.23.8"
+    "sql.js": "^1.12.0"
   }
 }
