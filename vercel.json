@@ -6,7 +6,6 @@
   ],
   "rewrites": [
     { "source": "/api/:any*", "destination": "/api/:any*" },
-
     { "source": "/", "destination": "/ui/index.html" },
     { "source": "/ui", "destination": "/ui/index.html" },
     { "source": "/ui/:rest*", "destination": "/ui/index.html" },
