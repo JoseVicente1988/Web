@@ -7,17 +7,7 @@
   "rewrites": [
     { "source": "/api/:any*", "destination": "/api/:any*" },
 
-    { "source": "/app", "destination": "/app.html" },
-
-    { "source": "/ui", "destination": "/ui/index.html" },
-    { "source": "/ui/:rest*", "destination": "/ui/index.html" },
-
-    { "source": "/", "destination": "/ui/index.html" },
-
-    { "source": "/:path*", "destination": "/ui/index.html" }
-  ],
-  "redirects": [
-    { "source": "/public/ui", "destination": "/ui", "permanent": false },
-    { "source": "/public/app", "destination": "/app", "permanent": false }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/:path*", "destination": "/index.html" }
   ]
 }
