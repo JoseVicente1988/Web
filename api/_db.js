@@ -1,66 +1,50 @@
 // api/_db.js
-// Abre shoping.db / shopping.db empaquetado en la lambda (Vercel).
-// LECTURA estable. Escritura sería efímera (si la haces, hazla en /tmp).
-
 const fs = require("fs");
 const path = require("path");
 const initSqlJs = require("sql.js");
 
 let _dbPromise = null;
 
-function tryPaths(basenames) {
-  const candidates = [];
-
-  for (const base of basenames) {
-    // 1) Junto al código de la función (ruta del bundle)
-    candidates.push(path.join(__dirname, base));
-    candidates.push(path.join(__dirname, "..", base));
-    // 2) Raíz del proyecto (a veces Vercel mantiene cwd en /var/task/user)
-    candidates.push(path.join(process.cwd(), base));
-  }
-
-  for (const p of candidates) {
-    try {
-      if (fs.existsSync(p)) return p;
-    } catch (_) {}
+function existingPath(paths) {
+  for (const p of paths) {
+    try { if (fs.existsSync(p)) return p; } catch (_) {}
   }
   return null;
 }
 
 async function loadSql() {
-  // sql-wasm.wasm lo empaquetamos vía includedFiles, así que existe.
+  // Vercel empaqueta node_modules, require.resolve encuentra el wasm
   const wasmPath = require.resolve("sql.js/dist/sql-wasm.wasm");
-  return await initSqlJs({
-    locateFile: () => wasmPath
-  });
+  return await initSqlJs({ locateFile: () => wasmPath });
 }
 
 async function openDBFromFile() {
   const SQL = await loadSql();
 
-  const dbPath = tryPaths(["shoping.db", "shopping.db"]);
+  // 1) Dentro de la función (empaquetado): api/_assets/...
+  // 2) Por si acaso, rutas relativas al cwd
+  const candidates = [
+    path.join(__dirname, "_assets", "shoping.db"),
+    path.join(__dirname, "_assets", "shopping.db"),
+    path.join(process.cwd(), "api", "_assets", "shoping.db"),
+    path.join(process.cwd(), "api", "_assets", "shopping.db"),
+    path.join(process.cwd(), "shoping.db"),
+    path.join(process.cwd(), "shopping.db")
+  ];
+
+  const dbPath = existingPath(candidates);
   if (!dbPath) {
-    throw new Error(
-      "No encuentro 'shoping.db' ni 'shopping.db' en el bundle. " +
-      "Asegúrate de subir el archivo al root del repo y que 'vercel.json' tenga 'includedFiles'."
-    );
+    throw new Error("No encuentro la base de datos. Pon 'shoping.db' (o 'shopping.db') en 'api/_assets/'.");
   }
 
   const fileBuffer = fs.readFileSync(dbPath);
-  const u8 = new Uint8Array(fileBuffer);
-  const db = new SQL.Database(u8); // copia en memoria de tu .db
-
-  // Si quisieras escribir durante la vida de la lambda:
-  // const tmp = "/tmp/runtime.db";
-  // fs.writeFileSync(tmp, Buffer.from(db.export()));
-  // y luego reabrir desde tmp para mutaciones.
-
+  const db = new (await loadSql()).Database(new Uint8Array(fileBuffer)); // copia en memoria
   return db;
 }
 
 async function getDB() {
   if (!_dbPromise) _dbPromise = openDBFromFile();
-  return await _dbPromise;
+  return _dbPromise;
 }
 
 function runSelect(db, sql, params = []) {
@@ -82,9 +66,7 @@ function listTables(db) {
 
 function findProductsTable(db) {
   const tables = listTables(db);
-  const candidates = tables.filter(t =>
-    /product|producto|items?|goods|inventory|shop|article/i.test(t)
-  );
+  const candidates = tables.filter(t => /product|producto|items?|goods|inventory|shop|article/i.test(t));
   return candidates[0] || null;
 }
 
