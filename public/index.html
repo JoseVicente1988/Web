@@ -1,14 +1,20 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Redirigiendo…</title>
-<script>
-  // Si alguien abre /public/index.html directamente, saltamos a la UI.
-  (function(){
-    var base = location.pathname.startsWith("/public/") ? "/public" : "";
-    location.replace(base + "/ui");
-  })();
-</script>
-<noscript>
-  <meta http-equiv="refresh" content="0; url=/ui">
-  <p>Redirigiendo a <a href="/ui">/ui</a>…</p>
-</noscript>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>OK · SPA</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; margin: 2rem }
+      code { background:#f3f3f3; padding: .2rem .4rem; border-radius: 4px }
+    </style>
+  </head>
+  <body>
+    <h1>Static OK</h1>
+    <p>Si ves esto, el estático y los rewrites funcionan.</p>
+    <ul>
+      <li><a href="/algo/que/no/existe">Ruta SPA (catch-all)</a></li>
+      <li><a href="/api/_status">/api/_status</a></li>
+    </ul>
+  </body>
+</html>
