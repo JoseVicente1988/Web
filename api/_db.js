@@ -1,4 +1,7 @@
 // api/_db.js
+// Abre tu SQLite empaquetado en la lambda (Vercel) desde api/_assets/.
+// LECTURA estable. Si escribes, será efímero (vida de la instancia).
+
 const fs = require("fs");
 const path = require("path");
 const initSqlJs = require("sql.js");
@@ -13,7 +16,7 @@ function existingPath(paths) {
 }
 
 async function loadSql() {
-  // Vercel empaqueta node_modules, require.resolve encuentra el wasm
+  // Vercel empaqueta node_modules; require.resolve encuentra el wasm
   const wasmPath = require.resolve("sql.js/dist/sql-wasm.wasm");
   return await initSqlJs({ locateFile: () => wasmPath });
 }
@@ -21,8 +24,7 @@ async function loadSql() {
 async function openDBFromFile() {
   const SQL = await loadSql();
 
-  // 1) Dentro de la función (empaquetado): api/_assets/...
-  // 2) Por si acaso, rutas relativas al cwd
+  // Candidatos: dentro del bundle (api/_assets) y por si acaso raíz
   const candidates = [
     path.join(__dirname, "_assets", "shoping.db"),
     path.join(__dirname, "_assets", "shopping.db"),
@@ -34,11 +36,13 @@ async function openDBFromFile() {
 
   const dbPath = existingPath(candidates);
   if (!dbPath) {
-    throw new Error("No encuentro la base de datos. Pon 'shoping.db' (o 'shopping.db') en 'api/_assets/'.");
+    throw new Error(
+      "No encuentro la base de datos. Pon 'shoping.db' (o 'shopping.db') en 'api/_assets/'."
+    );
   }
 
   const fileBuffer = fs.readFileSync(dbPath);
-  const db = new (await loadSql()).Database(new Uint8Array(fileBuffer)); // copia en memoria
+  const db = new SQL.Database(new Uint8Array(fileBuffer)); // copia en memoria
   return db;
 }
 
@@ -66,7 +70,9 @@ function listTables(db) {
 
 function findProductsTable(db) {
   const tables = listTables(db);
-  const candidates = tables.filter(t => /product|producto|items?|goods|inventory|shop|article/i.test(t));
+  const candidates = tables.filter(t =>
+    /product|producto|items?|goods|inventory|shop|article/i.test(t)
+  );
   return candidates[0] || null;
 }
 
