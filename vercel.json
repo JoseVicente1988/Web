@@ -3,11 +3,5 @@
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" },
     { "src": "public/**", "use": "@vercel/static" }
-  ],
-  "rewrites": [
-    { "source": "/api/:any*", "destination": "/api/:any*" },
-
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/:path*", "destination": "/index.html" }
   ]
 }
